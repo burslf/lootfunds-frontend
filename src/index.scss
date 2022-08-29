@@ -1,0 +1,195 @@
+@import './resources/styles/themes/light';
+@import './resources/styles/themes/dark';
+@import './resources/styles/base';
+@import '~react-pro-sidebar/dist/scss/styles.scss';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+@tailwind components;
+@tailwind base;
+@tailwind utilities;
+
+html, body, #root{
+  height: 100%; 
+}
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+// $gradient: 88deg, rgba(56,101,150,0.9) 0%, rgba(94,159,232,0.9) 48%, rgba(156,203,255,0.9) 100%;
+$gradient: 88deg, rgb(208, 146, 255) 0%, rgb(184, 91, 255) 48%, rgb(155, 28, 255) 100%;
+$gradient-hover: 88deg, rgb(175, 120, 218) 0%, rgb(145, 74, 199) 48%, rgb(126, 22, 206) 100%;
+
+$toolbar-height: 100px;
+$toolbar-height-mob: 90px;
+
+button.gradient {
+  background: linear-gradient($gradient) !important;
+  color: #ffffff;
+  font-size: 13px;
+  min-width: 100px !important;
+  // font-weight: 600;
+}
+
+button.gradient-hover:hover{
+  z-index: 999 !important;
+  background: linear-gradient($gradient-hover) !important;
+}
+
+@media only screen and (max-width: 750px) {
+  button.gradient {
+    width: 100px !important;
+    // min-width: 100px !important;
+    // font-size: 13px !important;
+  }
+}
+
+// 
+.input{
+  // width: 50%;
+  // padding: 8px;
+  // font-size: 20px;
+  height: 50px;
+  color: var(--input-font-color);
+  background-color: var(--input-color);
+  // border: 1px solid var(--input-color);
+  &::placeholder{
+    color: var(--input-font-color)
+  }
+  &:focus {
+    border: none !important;
+    outline: none !important;
+  }
+  & span {
+    overflow-wrap: break-word;
+  }
+}
+
+
+// MODAL
+.custom-modal{
+  outline: none;
+  position: relative;
+  background-color: var(--swap-card-background);
+  border-radius: 30px;
+  padding: 30px;
+  top: 50%;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+  bottom: auto;
+  height: 70%;
+  max-width: 600px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--theme-color);
+
+  & .token-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 7px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-y: auto;
+    & .token-field{
+      background-color: var(--card-color);
+      height:50px;
+      width: 100%;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      padding: 0px 15px;
+      cursor: pointer;
+      font-size: 20px;
+      margin: 10px 0px;
+      & img{
+        object-fit: contain;
+        height: 60%;
+        margin-right: 15px;
+      }
+    }
+  }
+}
+
+// NETWORK MODAL
+.network-modal {
+  outline: none;
+  position: relative;
+  background-color: var(--card-color);
+  border-radius: 30px;
+  padding: 30px;
+  top: 50%;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+  bottom: auto;
+  height: 40%;
+  min-height: 250px;
+  max-width: 450px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--theme-color);
+  h2 {
+    color: var(--input-font-color);
+  }
+  & .network-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 7px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: var(--input-font-color);
+    & .network-field{
+      // background-color: var(--input-color);
+      // height:50px;
+      width: 80%;
+      min-width: 200px;
+      // border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      // padding: 0px 15px;
+      cursor: pointer;
+      font-size: 20px;
+      margin: 10px 0px;
+
+      & img{
+        object-fit: contain;
+        height: 32px;
+        width: 32px;
+        margin-right: 15px;
+      }
+    }
+  }
+}
+
+.playing {
+  animation: playing 2s linear infinite;   
+}
+
+@keyframes playing {
+  0% {
+      -webkit-transform: rotate(0deg);
+      scale: 1;
+  }
+  50%{
+      scale: 1.2;
+  }
+  100% {
+      -webkit-transform: rotate(360deg);
+      scale: 1;
+  }
+}

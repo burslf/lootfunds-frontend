@@ -1,0 +1,35 @@
+@import "./index.scss";
+
+.layout {
+  height: calc(100% - $toolbar-height);
+  // padding-bottom: 80px;
+}
+
+.fade-enter {
+  opacity: 0;
+  // transform: translate(0, 25px);
+  z-index: 1;
+}
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  // transform: translate(0, 0);
+
+  transition: opacity 250ms ease-out;
+}
+.fade-exit {
+  opacity: 1;
+  // transform: translate(0, 0);
+}
+.fade-exit.fade-exit-active {
+  opacity: 0;
+  // transform: translate(0, 30px);
+
+  transition: opacity 250ms ease-out;
+}
+
+
+@media only screen and (max-width: 750px) {
+  .layout {
+    height: calc(100% - $toolbar-height-mob) !important;
+  }
+}

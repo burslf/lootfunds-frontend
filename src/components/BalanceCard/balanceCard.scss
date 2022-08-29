@@ -1,0 +1,66 @@
+@import "../../index.scss";
+
+.balance-card{
+    height: 150px;
+    width: 240px;
+    // background-color: #ffffff;
+    // border: 1px solid #e0e0e0;
+    // border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    & .balance {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 110px;
+        align-items: center;
+        font-weight: 600;
+        font-size: 16px;
+        color: #ffffff;
+        background-color: var(--card-color);
+        border-bottom: none !important;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+    & .bottom {
+        width: 100%;
+        display: flex;
+
+        & .add-fund, .unlock-fund {
+            width: 100%;
+            height: 40px;
+            background: linear-gradient($gradient);
+            border: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            & span{
+                font-weight: 600;
+                font-size: 16px;
+            }
+            
+
+        }
+        & .left {
+            border-bottom-left-radius: 7px;
+            width: 50%;
+            cursor: pointer;
+            &:hover{
+                background: linear-gradient($gradient-hover);
+            }
+        }
+
+        & .right {
+            border-bottom-right-radius: 7px;
+            width: 50%;
+            cursor: pointer;
+            &:hover{
+                background: linear-gradient($gradient-hover);
+            }
+        }
+    }
+}
