@@ -18,7 +18,7 @@ import { tokenNameToAddress } from '../../assets/content/availTokens';
 import { getLmtBalances, getLmtNativeBalances, lmtService } from '../../services/lockMyTokens';
 import { getContractInstance } from '../../services/ethers';
 import { chainIdToContract, contractAddress } from '../../assets/contract/contractAddress';
-import LockMyTokensABI from '../../assets/contract/LockMyTokensABI.json';
+import LootFundsABI from '../../assets/contract/LootFundsABI.json';
 import { fromWei } from '../../utils/utils';
 import { contractsService } from '../../services/contracts';
 
@@ -88,7 +88,7 @@ const Header = (props) => {
 
     const handleSelectToken = async (name, image, address, native) => {
         try {
-            const lmtContract = await getContractInstance(chainIdToContract[chainId!], LockMyTokensABI, signer);
+            const lmtContract = await getContractInstance(chainIdToContract[chainId!], LootFundsABI, signer);
             let balances = [];
             if (native){
                 balances = await getLmtNativeBalances(lmtContract, userAddress)

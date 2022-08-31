@@ -17,7 +17,7 @@ import { chainIdToNetworkNames, fromWei } from './utils/utils';
 import { chainIdToContract } from './assets/contract/contractAddress';
 import { tokenNameToAddress } from './assets/content/availTokens';
 import { getLmtBalances, getLmtNativeBalances, lmtService, _currentCurrency, _lmtBalance, _lmtLockedBalance } from './services/lockMyTokens';
-import LockMyTokensABI from './assets/contract/LockMyTokensABI.json';
+import LootFundsABI from './assets/contract/LootFundsABI.json';
 
 const eth = new ethereum();
 
@@ -90,7 +90,7 @@ function App() {
     const contractForNetwork = chainIdToContract[chainId!]
     
     const tokenToFetch = tokenNameToAddress[currentNetwork][curCurrency]
-    const lmtContract = await getContractInstance(contractForNetwork, LockMyTokensABI, signer);
+    const lmtContract = await getContractInstance(contractForNetwork, LootFundsABI, signer);
     let balances = []
     if (tokenToFetch.native) {
         balances = await getLmtNativeBalances(lmtContract, curAddress);

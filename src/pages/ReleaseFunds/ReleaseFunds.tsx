@@ -7,7 +7,7 @@ import { _address, _chain } from "../../services/auth";
 import { releaseFunds, releaseLockedFunds, releaseNativeFunds, releaseNativeLockedFunds, _lmtBalance, _lmtLockedBalance } from "../../services/lockMyTokens";
 import { getContractInstance, _signer } from "../../services/ethers";
 import {chainIdToContract } from "../../assets/contract/contractAddress";
-import LockMyTokensABI from '../../assets/contract/LockMyTokensABI.json';
+import LootFundsABI from '../../assets/contract/LootFundsABI.json';
 import { BigNumber, ethers } from "ethers";
 import { Alert, Snackbar, TextField } from "@mui/material";
 import { useLocation } from "react-router-dom";
@@ -102,7 +102,7 @@ const ReleaseFunds = (props) => {
             return
         }
         try {
-            const lmtContract = await getContractInstance(chainIdToContract[chainId!], LockMyTokensABI, signer);
+            const lmtContract = await getContractInstance(chainIdToContract[chainId!], LootFundsABI, signer);
             const tokenAddress = selectedToken.address
             const decimals = 18
             const amountString = (Number(amountField) * 10 ** decimals).toLocaleString('fullwide', { useGrouping: false })

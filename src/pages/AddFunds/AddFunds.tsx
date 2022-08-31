@@ -8,7 +8,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { depositFund, depositNativeFund, lockFund, lockNativeFund } from "../../services/lockMyTokens";
 import { getContractInstance, getTokenBalance, _signer } from "../../services/ethers";
 import {chainIdToContract } from "../../assets/contract/contractAddress";
-import LockMyTokensABI from '../../assets/contract/LockMyTokensABI.json';
+import LootFundsABI from '../../assets/contract/LootFundsABI.json';
 import { BigNumber, ethers } from "ethers";
 import { Alert, Snackbar, TextField } from "@mui/material";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -132,7 +132,7 @@ const AddFunds = (props) => {
             return
         }
         try {
-            const lmtContract = await getContractInstance(chainIdToContract[chainId!], LockMyTokensABI, signer);
+            const lmtContract = await getContractInstance(chainIdToContract[chainId!], LootFundsABI, signer);
             const tokenAddress = selectedToken.address
             const decimals = 18
             const amountString = (Number(amountField) * 10 ** decimals).toLocaleString('fullwide', { useGrouping: false })
