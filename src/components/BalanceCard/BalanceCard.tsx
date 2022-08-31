@@ -17,10 +17,6 @@ const BalanceCard = (props: any) => {
 
     }, []);
 
-    useEffect(() => {
-        console.log(props.balance)
-    }, [])
-
     return (
         <div className="balance-card">
             <div className="balance">

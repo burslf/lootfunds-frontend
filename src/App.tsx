@@ -13,7 +13,11 @@ import {  authService, _address, _chain, _isWeb3Enabled } from './services/auth'
 import { ethersService, getContractInstance, _provider, _signer } from './services/ethers';
 import React from 'react';
 import ReleaseFunds from './pages/ReleaseFunds/ReleaseFunds';
-import { chainIdToNetworkNames } from './utils/utils';
+import { chainIdToNetworkNames, fromWei } from './utils/utils';
+import { chainIdToContract } from './assets/contract/contractAddress';
+import { tokenNameToAddress } from './assets/content/availTokens';
+import { getLmtBalances, getLmtNativeBalances, lmtService, _currentCurrency, _lmtBalance, _lmtLockedBalance } from './services/lockMyTokens';
+import LockMyTokensABI from './assets/contract/LockMyTokensABI.json';
 
 const eth = new ethereum();
 
@@ -24,7 +28,9 @@ function App() {
   const [curAddress, setAddress] = useState(null);
   const [signer, setSigner] = useState<Signer | null>(null)
   const [provider, setProvider] = useState<providers.Web3Provider | null>(null)
-
+  const [curCurrency, setCurCurrency] = useState<string | null>("null")
+  const [lmtBalance, setLmtBalance] = useState<string | null>(null);
+  const [lmtLockedBalance, setLmtLockedBalance] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -34,6 +40,11 @@ function App() {
     _address.subscribe(a => setAddress(a))
     _signer.subscribe(s => setSigner(s))
     _provider.subscribe(p => setProvider(p))
+
+    _currentCurrency.subscribe(c => setCurCurrency(c))
+    _lmtBalance.subscribe(b => setLmtBalance(b));
+    _lmtLockedBalance.subscribe(b => setLmtLockedBalance(b));
+
   }, [])
 
 
@@ -46,44 +57,49 @@ function App() {
       window.ethereum.on('chainChanged', function (networkId) {
         const chainIdFromHex = parseInt(networkId, 16)
         if (chainIdToNetworkNames[chainIdFromHex]){
-          console.log("DAMN")
           authService.setChain(chainIdFromHex)
         }else {
           eth.switchEthereumChain(5)
-          // authService.setChain(5)
         }
-        console.log('chainChanged', networkId);
       });
     }
   }, [])
 
-  useEffect(() => {    // Set user balance if chain or address changed
+  useEffect(() => {  
     if (isWeb3Enabled && chainId && curAddress) {
-      getBalance()
-      // console.log(chainId)
-      // fetchLmtBalances(signer)
+      fetchNativeBalance(signer)
+      fetchLmtBalances(signer)
     }
-  }, [chainId, isWeb3Enabled, curAddress]);
+  }, [chainId]);
 
-
-  async function getBalance() {
-    try {
-      const bal = await signer!.getBalance()
-      const balanceFromBigNum = Number(bal.toString())
-      authService.setBalance(balanceFromBigNum)
-      return bal
-    } catch (e) {
-      console.log(e)
+  useEffect(() => {  
+    if (isWeb3Enabled && chainId && curAddress) {
+      fetchNativeBalance(signer)
+      fetchLmtBalances(signer)   
     }
+  }, [curAddress]);
+
+  const fetchNativeBalance = async (signer) => {
+    const balance = await signer.getBalance()
+    const balanceFromBigNum = Number(balance.toString())
+    authService.setBalance(balanceFromBigNum)
   }
 
-//   const fetchLmtBalances = async (signer) => {
-//     const lmtContract = await getContractInstance(contractAddress, LockMyTokensABI, signer);
-//     const balances = await getLmtBalances(lmtContract, tokenNameToAddress["ETHEREUM"]["USDT"].address, curAddress);
-//     lmtService.setLmtLockedBalance(balances[0])
-//     lmtService.setLmtBalance(balances[1])
-//     lmtService.setCurrentCurrency("USDT")
-// }
+  const fetchLmtBalances = async (signer) => {
+    const currentNetwork = chainIdToNetworkNames[chainId!].name
+    const contractForNetwork = chainIdToContract[chainId!]
+    
+    const tokenToFetch = tokenNameToAddress[currentNetwork][curCurrency]
+    const lmtContract = await getContractInstance(contractForNetwork, LockMyTokensABI, signer);
+    let balances = []
+    if (tokenToFetch.native) {
+        balances = await getLmtNativeBalances(lmtContract, curAddress);
+    }else {
+        balances = await getLmtBalances(lmtContract, tokenNameToAddress[currentNetwork][curCurrency!].address, curAddress);
+    }
+    lmtService.setLmtLockedBalance(fromWei(balances[0]))
+    lmtService.setLmtBalance(fromWei(balances[1]))
+}
 
 
   const getNetwork = async () => {
@@ -136,8 +152,8 @@ function App() {
       <TransitionGroup className='layout' id="layout">
         <CSSTransition key={location.key} classNames="fade" timeout={300}>
             <Routes location={location}>
-              <Route path='/' element={<Home />} />
-              <Route path='/add-funds' element={<AddFunds />} />
+              <Route path='/' element={<Home fetchLmtBalances={fetchLmtBalances}/>} />
+              <Route path='/add-funds' element={<AddFunds fetchNativeBalance={fetchNativeBalance}/>} />
               <Route path='/release-funds' element={<ReleaseFunds />} />
               
             </Routes>

@@ -45,7 +45,7 @@ const rpcUrls = {
     }
 }
 
-const chainIdToNetworkNames = {
+const chainIdToNetworkNames: any = {
     100: {
         currency: "xDai",
         name: "GNOSIS",

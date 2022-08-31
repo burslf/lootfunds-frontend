@@ -81,12 +81,10 @@ const ReleaseFunds = (props) => {
 
     const handleSelectToken = (name, image, address, native) => {
         setSelectedToken({ name, image, address, native })
-        console.log({ address })
         closeModal()
     }
 
     const setMaxAmount = () => {
-        console.log(lmtBalance, lmtLockedBalance)
         if (fundType == "Lock") {
             setAmount(lmtLockedBalance!)
         }
@@ -98,7 +96,6 @@ const ReleaseFunds = (props) => {
     }
 
     const releaseFundsContracts = async () => {
-        console.log(fundType)
         if (Number(amountField) == 0) {
             setErrorMsg("Amount cannot be 0");
             setErrorOpen(true);
@@ -109,7 +106,6 @@ const ReleaseFunds = (props) => {
             const tokenAddress = selectedToken.address
             const decimals = 18
             const amountString = (Number(amountField) * 10 ** decimals).toLocaleString('fullwide', { useGrouping: false })
-        //     console.log(amountString)
             const amountInWei = BigNumber.from(amountString)
             if (selectedToken.native){
                 if (fundType == "Deposit") {

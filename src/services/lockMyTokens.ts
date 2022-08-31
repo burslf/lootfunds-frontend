@@ -24,7 +24,6 @@ const getLmtBalances = async (lmtContract, tokenAddress, userAddress) => {
         const lmtBalances = await lmtContract.walletBalance(tokenAddress, userAddress)
         const lockedBalance = fromBigNumber(lmtBalances._locked)
         const balance = fromBigNumber(lmtBalances._available)
-        console.log(lockedBalance, balance)
         return [lockedBalance, balance]
     } catch (e: any) {
         return e
@@ -36,7 +35,6 @@ const getLmtNativeBalances = async (lmtContract, userAddress) => {
         const lmtBalances = await lmtContract.walletNativeBalance(userAddress)
         const lockedBalance = fromBigNumber(lmtBalances._locked)
         const balance = fromBigNumber(lmtBalances._available)
-        console.log(lockedBalance, balance)
         return [lockedBalance, balance]
     } catch (e: any) {
         return e
@@ -46,9 +44,7 @@ const getLmtNativeBalances = async (lmtContract, userAddress) => {
 const depositFund = async (lmtContract: ethers.Contract, tokenAddress, amount) => {
     try {
         const gas = await lmtContract.estimateGas.depositERC20(tokenAddress, amount)
-        console.log(gas)
         const formattedGas = Number(gas)
-        console.log(gas)
         await lmtContract.depositERC20(tokenAddress, amount, {
             gasLimit: gas
         })
@@ -63,9 +59,7 @@ const depositFund = async (lmtContract: ethers.Contract, tokenAddress, amount) =
 const lockFund = async (lmtContract, tokenAddress, amount, timestamp) => {
     try {
         const gas = await lmtContract.estimateGas.lockERC20(tokenAddress, amount, timestamp)
-        console.log(gas)
         const formattedGas = Number(gas)
-        console.log(gas)
         await lmtContract.lockERC20(tokenAddress, amount, timestamp, {
             gasLimit: gas
         })
@@ -82,12 +76,9 @@ const lockFund = async (lmtContract, tokenAddress, amount, timestamp) => {
 }
 
 const depositNativeFund = async (lmtContract: ethers.Contract, amount) => {
-    console.log(amount)
     try {
         const gas = await lmtContract.estimateGas.depositNative({value:amount})
-        console.log(gas)
         const formattedGas = Number(gas)
-        console.log(gas)
         await lmtContract.depositNative({
             gasLimit: gas,
             value: fromBigNumber(amount)
@@ -103,9 +94,7 @@ const depositNativeFund = async (lmtContract: ethers.Contract, amount) => {
 const lockNativeFund = async (lmtContract, amount, timestamp) => {
     try {
         const gas = await lmtContract.estimateGas.lockNative(timestamp, {value:amount})
-        console.log(gas)
         const formattedGas = Number(gas)
-        console.log(gas)
         await lmtContract.lockNative(timestamp, {
             gasLimit: gas,
             value: amount
@@ -125,9 +114,7 @@ const lockNativeFund = async (lmtContract, amount, timestamp) => {
 const releaseFunds = async (lmtContract, tokenAddress, amount, dest) => {
     try {
         const gas = await lmtContract.estimateGas.withdrawERC20(tokenAddress, amount, dest)
-        console.log(gas)
         const formattedGas = Number(gas)
-        console.log(gas)
         await lmtContract.withdrawERC20(tokenAddress, amount, dest, {
             gasLimit: gas
         })
@@ -145,12 +132,9 @@ const releaseFunds = async (lmtContract, tokenAddress, amount, dest) => {
 }
 
 const releaseLockedFunds = async(lmtContract, tokenAddress, amount, dest) => {
-    console.log(tokenAddress, amount, dest)
     try {
         const gas = await lmtContract.estimateGas.withdrawLockedERC20(tokenAddress, amount, dest)
-        console.log(gas)
         const formattedGas = Number(gas)
-        console.log(gas)
         await lmtContract.withdrawLockedERC20(tokenAddress, amount, dest, {
             gasLimit: gas
         })
@@ -168,12 +152,9 @@ const releaseLockedFunds = async(lmtContract, tokenAddress, amount, dest) => {
 }
 
 const releaseNativeFunds = async(lmtContract, amount, dest) => {
-    console.log(amount, dest)
     try {
         const gas = await lmtContract.estimateGas.withdrawNative(amount, dest)
-        console.log(gas)
         const formattedGas = Number(gas)
-        console.log(gas)
         await lmtContract.withdrawNative(amount, dest, {
             gasLimit: gas
         })
@@ -191,12 +172,9 @@ const releaseNativeFunds = async(lmtContract, amount, dest) => {
 }
 
 const releaseNativeLockedFunds = async(lmtContract, amount, dest) => {
-    console.log(amount, dest)
     try {
         const gas = await lmtContract.estimateGas.withdrawLockedNative(amount, dest)
-        console.log(gas)
         const formattedGas = Number(gas)
-        console.log(gas)
         await lmtContract.withdrawLockedNative(amount, dest, {
             gasLimit: gas
         })

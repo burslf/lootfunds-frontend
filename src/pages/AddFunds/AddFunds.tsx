@@ -56,7 +56,6 @@ const AddFunds = (props) => {
 
     useEffect(() => {
         if (location.state?.token && location.state?.fundType) {
-            console.log(location.state.token, location.state.fundType);
             setSelectedToken(location.state.token);
             setFundType(location.state.fundType);
         }
@@ -95,7 +94,7 @@ const AddFunds = (props) => {
 
     const handleSelectToken = (name, image, address, native) => {
         setSelectedToken({ name, image, address, native })
-        console.log({ address })
+        props.fetchNativeBalance(signer)
         closeModal()
     }
 
@@ -107,25 +106,18 @@ const AddFunds = (props) => {
             return
         }
         setDateField(e)
-        // let a = e.format()
-        // console.log(a.format())
-        // console.log(e.target.value)
-        // setDateField(e.target.value)
-        // const timestamp = Math.floor(new Date(e.target.value).getTime() / 1000);
-        // setDateField(timestamp)
-        // console.log(timestamp)
+
 
     }
 
     const setMaxAmount = async () => {
-        console.log(selectedToken)
-        if (selectedToken.native && curBalance){
+        console.log(curBalance)
+        if (selectedToken.native && (curBalance != null)){
             setAmount(fromWei(curBalance))
         }else{
             const balanceOfToken = await getTokenBalance(selectedToken.address, ERC20Abi, curAddress, signer)
             setAmount(fromWei(fromBigNumber(balanceOfToken)))
         }
-        // console.log(fromBigNumber(balanceOfToken))
     }
 
     const handleSelectType = (type) => {
@@ -144,11 +136,9 @@ const AddFunds = (props) => {
             const tokenAddress = selectedToken.address
             const decimals = 18
             const amountString = (Number(amountField) * 10 ** decimals).toLocaleString('fullwide', { useGrouping: false })
-            console.log(amountString)
             const amountInWei = BigNumber.from(amountString)
             if (selectedToken.native){
                 if (fundType == "Deposit") {
-                    console.log(amountInWei)
                     await depositNativeFund(lmtContract, amountInWei)
                 }else {
                     const date = dateField

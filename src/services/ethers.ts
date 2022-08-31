@@ -22,7 +22,6 @@ const getContractInstance = async (contractAddress, abi, signer) => {
 
 const getTokenBalance = async (tokenAddress, abi, userAddress, signer) => {
     const ERC20contract = await new ethers.Contract(tokenAddress, abi, signer)
-    console.log(ERC20contract)
     const balance = await ERC20contract.balanceOf(userAddress) 
     return balance
 }

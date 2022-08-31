@@ -7,10 +7,9 @@ import { chainIdToNetworkNames, fromBigNumber, fromWei, getGatewayUrl } from '..
 import { getContractInstance, _signer } from '../../services/ethers';
 import { _address, authService, _chain } from '../../services/auth';
 import { chainIdToContract, contractAddress } from '../../assets/contract/contractAddress';
-import LockMyTokensABI from '../../assets/contract/LockMyTokensABI.json';
 import { tokenNameToAddress } from '../../assets/content/availTokens';
 
-const Home = () => {
+const Home = (props) => {
     const [lmtBalance, setLmtBalance] = useState<string | null>(null);
     const [lmtLockedBalance, setLmtLockedBalance] = useState<string | null>(null);
     const [curCurrency, setCurCurrency] = useState<string | null>("null")
@@ -28,34 +27,16 @@ const Home = () => {
     }, [])
 
     useEffect(() => {
-        if (chainId && !curCurrency) {
+        if (chainId) {
             lmtService.setCurrentCurrency(chainIdToNetworkNames[chainId].currency)
         }
     }, [chainId])
 
     useEffect(() => {
         if (signer && curAddress && chainId && curCurrency) {
-            fetchLmtBalances(signer)
+            // props.fetchLmtBalances(signer)
         }
     }, [signer, curAddress, chainId, curCurrency])
-
-    const fetchLmtBalances = async (signer) => {
-        const currentNetwork = chainIdToNetworkNames[chainId!].name
-        const contractForNetwork = chainIdToContract[chainId!]
-        
-        // console.log(tokenNameToAddress[currentNetwork][curCurrency])
-        const tokenToFetch = tokenNameToAddress[currentNetwork][curCurrency]
-        const lmtContract = await getContractInstance(contractForNetwork, LockMyTokensABI, signer);
-        let balances = []
-        if (tokenToFetch.native) {
-            balances = await getLmtNativeBalances(lmtContract, curAddress);
-        }else {
-            balances = await getLmtBalances(lmtContract, tokenNameToAddress[currentNetwork][curCurrency!].address, curAddress);
-        }
-        console.log(balances)
-        lmtService.setLmtLockedBalance(fromWei(balances[0]))
-        lmtService.setLmtBalance(fromWei(balances[1]))
-    }
 
 
     return (
